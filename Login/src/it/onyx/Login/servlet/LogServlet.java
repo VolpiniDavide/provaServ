@@ -2,6 +2,8 @@ package it.onyx.Login.servlet;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -49,6 +51,10 @@ public class LogServlet extends HttpServlet {
 		request.setAttribute("password", ud.getPassword());
 		request.setAttribute("id", ud.getId_cliente());
 		
+		ArrayList <UserDao> users = Util.findAll(this.getServletContext());
+		
+		request.setAttribute("users", users);
+		
 		request.getRequestDispatcher("JSP/home.jsp").forward(request, response);
 		
 		} else {
@@ -61,6 +67,10 @@ public class LogServlet extends HttpServlet {
 						request.getRequestDispatcher("JSP/logging.jsp").forward(request, response);
 					}
 		}
+		
+		
+		
+		
 	}
 
 	/**

@@ -17,9 +17,10 @@
 		<input type = "text" name ="firstName" placeholder="first name"><br>
 		<input type = "text" name ="lastName" placeholder="last name"><br>
 		<input type="submit" value="invia">
+		<p> ${Message} </p>
 		</form>
 		</div>
-		<p> ${Message} </p>
+		
 
 </body>
 </html>

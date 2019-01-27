@@ -1,5 +1,8 @@
 package it.onyx.Login.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 
 import it.onyx.Login.crud.CrudClass;
@@ -46,6 +49,18 @@ public class Util {
 			
 		}
 		
+		
+		// --------------------------------- metodo findAll ----------------------                //
+		
+		public static ArrayList<UserDao> findAll ( ServletContext servletContext){
+			
+			CrudClass cc = new CrudClass();
+			
+			ArrayList <UserDao> users = cc.findAll(servletContext);
+			
+			return users;
+			
+		}
 		
 
 

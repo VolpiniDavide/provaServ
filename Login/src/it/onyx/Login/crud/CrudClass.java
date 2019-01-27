@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -111,5 +113,57 @@ public Boolean createUser(UserDao ud, ServletContext servletContext) {
 	return ex;
 	
 }
+
+
+
+
+public ArrayList<UserDao> findAll (ServletContext servletContext){
+	   
+		Factory_connection fc = new Factory_connection(); 
+		Connection con = fc.getConnection("videoteca", "root", "1234");
+		Statement stmt;
+		ResultSet res = null;
+		Boolean b = false;
+		
+		ArrayList<UserDao> utenti = new ArrayList<>();
+		
+		try {
+			stmt = con.createStatement();
+			res = stmt.executeQuery(StmtCreator.getQuery("selectCliente2", servletContext));
+			
+			
+			while (res.next()) {
+			
+			String nome = res.getString("Nome");
+			String cognome = res.getString("Cognome");
+			String num = res.getString("Num_Telefono");
+			String id = res.getString("ID_Cliente");
+			String mail = res.getString("email");
+			String passw = res.getString("password");
+			
+			UserDao ud = new UserDao();
+			
+			ud.setCognome(cognome);
+			ud.setNome(nome);
+			ud.setNum_telefono(num);
+			ud.setId_cliente(id);
+			ud.setEmail(mail);
+			ud.setPassword(passw);
+			
+			utenti.add(ud);
+			
+			}
+			
+		} catch ( SQLException e) {
+			e.printStackTrace();
+		}
+
+		
+		return utenti;
+		
+	   
+	   
+}
+
 
 }
