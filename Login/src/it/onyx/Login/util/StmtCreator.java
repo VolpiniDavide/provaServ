@@ -3,7 +3,10 @@ package it.onyx.Login.util;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
+
+import javax.servlet.ServletContext;
 
 public class StmtCreator {
 	
@@ -12,15 +15,15 @@ public class StmtCreator {
 	
 	
 	
-	public static String getQuery (String query) {
+	public static String getQuery (String query, ServletContext servletContext) {
 		
 		String outQuery;
-		FileInputStream fis;
+		
 		Properties prop = new Properties();
 		
 		
 		try {
-			fis = new FileInputStream("resources/query.properties");
+			InputStream fis = servletContext.getResourceAsStream("/WEB-INF/query.properties");
 			prop.load(fis);
 		}catch (FileNotFoundException e){
 			System.out.println("can't load input-stream");

@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-
+import javax.servlet.ServletContext;
 
 import it.onyx.Login.connection.Factory_connection;
 import it.onyx.Login.dao.UserDao;
@@ -19,7 +19,7 @@ public class CrudClass {
 	
                            // ---------------------------------- 	READ    -------------------------------- //
 	
-	public UserDao selectUser (String email, String password) {
+	public UserDao selectUser (String email, String password, ServletContext servletContext) {
 		
 		Statement stmt;
 		Factory_connection fc = new Factory_connection(); 
@@ -29,7 +29,7 @@ public class CrudClass {
 		
 		try {
 			stmt = connection.createStatement();
-			res = stmt.executeQuery(StmtCreator.getQuery("selectCliente1")+email+StmtCreator.getQuery("andPwd")+password+"'");
+			res = stmt.executeQuery(StmtCreator.getQuery("selectCliente1", servletContext)+email+StmtCreator.getQuery("andPwd", servletContext)+password+"'");
 			if(res.next()) {
 				ud.setNome(res.getString("nome"));
 				ud.setCognome(res.getString("cognome"));
@@ -54,7 +54,7 @@ public class CrudClass {
 						// ------------------------- MAIL EXIST --------------------------- //
 	
 	
-public Boolean emailExists ( String email ) {
+public Boolean emailExists ( String email, ServletContext servletContext ) {
 		
 		// verifico che la mail esista come valore salvato nel db e ritorno true per verifica durante il login
 	
@@ -66,7 +66,7 @@ public Boolean emailExists ( String email ) {
 		
 		try {
 			stmt = con.createStatement();
-			res = stmt.executeQuery(StmtCreator.getQuery("selectCliente1")+email+StmtCreator.getQuery("chiudeSelect"));
+			res = stmt.executeQuery(StmtCreator.getQuery("selectCliente1", servletContext )+email+StmtCreator.getQuery("chiudeSelect", servletContext));
 			if (res.next()) return true;
 		} catch ( SQLException e) {
 			e.printStackTrace();
@@ -75,5 +75,41 @@ public Boolean emailExists ( String email ) {
 		return b;
 		
 	}
+
+
+							// ---------------------------------- 	CREATE    -------------------------------- //
+
+
+public Boolean createUser(UserDao ud, ServletContext servletContext) {
+	Statement stmt;
+	Factory_connection fc = new Factory_connection(); 
+	Connection connection = fc.getConnection("videoteca", "root", "1234");
+	ResultSet res = null;
+	String id = "0";	
+	Boolean ex = false;
+	
+	try {
+		stmt = connection.createStatement();
+		stmt.executeUpdate(StmtCreator.getQuery("insertCliente1", servletContext)+ud.getNome()+"','"+ud.getCognome()+"','"+ud.getNum_telefono()+"','"+id+"','"+ud.getEmail()+"','"+ud.getPassword()+StmtCreator.getQuery("chiudeInsert",servletContext));
+		res = stmt.executeQuery(StmtCreator.getQuery("selectCliente1", servletContext)+ud.getEmail()+StmtCreator.getQuery("andPwd", servletContext)+ud.getPassword()+"'");
+		
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+	try {
+		if(res.next()) {
+			ex= true;
+		} else {
+			ex = false;
+		}
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	
+	
+	return ex;
+	
+}
 
 }

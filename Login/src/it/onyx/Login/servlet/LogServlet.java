@@ -29,7 +29,7 @@ public class LogServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-System.out.println("get");
+        System.out.println("get");
 		
 		String email, password, passwordError, userNotFound;
 		
@@ -38,7 +38,7 @@ System.out.println("get");
 		passwordError = "wrong password, please try again";
 		userNotFound = "user not found";
 		
-		UserDao ud = Util.login(email, password);
+		UserDao ud = Util.login(email, password, this.getServletContext());
 		
 		if ( ud.getNome() != null) {
 		
@@ -49,15 +49,15 @@ System.out.println("get");
 		request.setAttribute("password", ud.getPassword());
 		request.setAttribute("id", ud.getId_cliente());
 		
-		request.getRequestDispatcher("home.jsp").forward(request, response);
+		request.getRequestDispatcher("JSP/home.jsp").forward(request, response);
 		
 		} else {
 			
-					if (Util.emailExist(email)) {
-						request.setAttribute("errorMesage", passwordError);
+					if (Util.emailExist(email, this.getServletContext())) {
+						request.setAttribute("errorMessage", passwordError);
 						request.getRequestDispatcher("JSP/logging.jsp").forward(request, response);
 					}else {
-						request.setAttribute("errorMesage", userNotFound);
+						request.setAttribute("errorMessage", userNotFound);
 						request.getRequestDispatcher("JSP/logging.jsp").forward(request, response);
 					}
 		}
